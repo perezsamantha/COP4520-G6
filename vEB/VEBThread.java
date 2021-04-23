@@ -18,7 +18,9 @@ public class VEBThread implements Runnable
         for (int i = 0; i < total; i+=2)
         {
           Node n = new Node(i*i, i);
-          boolean test = tree.insert(tree, n);
+        //  System.out.println("Thread " +Thread.currentThread().getId()+ " Inserting "+n.getValue());
+        //  boolean test = tree.insert(tree, n);
+          boolean test = tree.insert(i*i, i);
           if (!test)
           {
             System.out.println("Could not insert "+n.getKey());
@@ -30,7 +32,9 @@ public class VEBThread implements Runnable
         for (int i = 1; i < total; i+=2)
         {
           Node n = new Node(i*i, i);
-          boolean test = tree.insert(tree, n);
+        //  System.out.println("Thread " +Thread.currentThread().getId()+ " Inserting "+n.getValue());
+          //boolean test = tree.insert(tree, n);
+          boolean test = tree.insert(i*i, i);
           if (!test)
           {
             System.out.println("Could not insert "+n.getKey());
@@ -40,14 +44,15 @@ public class VEBThread implements Runnable
     }
     else
     {
-      for (int i = 0; i < total; i++)
+      while(true)
       {
         Node opNode = tree.popMin();
         if (Objects.isNull(opNode))
         {
-          break;
+          break; //System.out.println("Thread "+Thread.currentThread().getId()+" OP Node NULL");
+          //continue;
         }
-        //System.out.println("Thread "+Thread.currentThread().getId()+" POPPED OFF "+opNode.getValue());
+      //  System.out.println("Thread "+Thread.currentThread().getId()+" POPPED OFF "+opNode.getValue());
       }
     }
   }

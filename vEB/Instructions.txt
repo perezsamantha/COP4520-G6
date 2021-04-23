@@ -1,0 +1,8 @@
+Instructions for VEB use
+
+Create a tree object as follows: ParallelVEB(int capacity) capacity is the maximum number of elements in the tree,
+ meaning the highest key (lowest priority) is capacity - 1. Ex: a tree with a capacity of 100 contains keys 0 - 99
+
+To insert call: treeObject.insert(int val, int key) with value corresponding to the value of the inserted value and key being the unique priority
+
+To pop min call treeObject.popMin()
