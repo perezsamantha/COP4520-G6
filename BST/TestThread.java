@@ -37,36 +37,31 @@ public class TestThread extends Thread{
 			
 			// keep trying to insert
 			while (!tree.insert(currKey, currValue)) {
-				
+				//Thread.yield();
 			}
 			
 			Thread.yield();
 			
 		}
 
-		// temp solution just to get something working:
-		// synchronize popMin() or have only first thread pop
-		
-		//if (ID == 1) {
-		
-		while (true) {
-			
-				// doesn't work perfectly with multiple threads :(
-			
-				// break if all keys have been popped
-				if (popped.get() >= capacity + 1) {
-					break;
-				}
-			
+		// only run <= 4 threads for efficiency purposes
+		if (ID <= 4) {
+			while (true) {
 				// delete node with prioritized key from tree
-				if (tree.popMin() != null) {
+				Node pop = tree.popMin();
+				
+				// check if at dummy nodes
+				if (pop != null) {
 					popped.getAndIncrement();
+					if (pop.key >= Node.DUMMY3 && popped.get() > capacity + 1) {
+						break;
+					}
 				}
 			
 				Thread.yield();
 			} 
-		//}
-			
+		}
+				
 	}
 
 }

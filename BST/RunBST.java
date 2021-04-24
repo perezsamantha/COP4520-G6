@@ -8,7 +8,7 @@ public class RunBST {
 	public static void main(String[] args) throws InterruptedException {
 		int i;
 		int numThreads = 8;
-		int capacity = 1000;
+		int capacity = 100;
 		
 		// instantiate BST
 		BST tree = new BST();
