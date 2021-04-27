@@ -1,3 +1,5 @@
+package com.cop4520.test3;
+
 public class Node
 {
   RemoteClient remoteClient;

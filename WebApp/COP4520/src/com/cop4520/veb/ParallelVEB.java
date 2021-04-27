@@ -1,3 +1,5 @@
+package com.cop4520.veb;
+
 import java.util.*;
 import java.util.concurrent.atomic.AtomicMarkableReference;
 public class ParallelVEB
@@ -12,8 +14,8 @@ public class ParallelVEB
   {
     //System.out.println("Size: "+size);
     universeSize = size;
-    minimum = new AtomicMarkableReference<Node>(new Node(null,-1),false);
-    maximum = new AtomicMarkableReference<Node>(new Node(null,-1),false);
+    minimum = new AtomicMarkableReference<Node>(new Node(-1,-1),false);
+    maximum = new AtomicMarkableReference<Node>(new Node(-1,-1),false);
     //base case
     if (size <= 2)
     {
@@ -40,14 +42,14 @@ public class ParallelVEB
     }
   }
 
-  public void setMinimum(RemoteClient remoteClient, int key)
+  public void setMinimum(int val, int key)
   {
-    this.minimum = new AtomicMarkableReference<Node>(new Node(remoteClient,key),false);
+    this.minimum = new AtomicMarkableReference<Node>(new Node(val,key),false);
   }
 
-  public void setMaximum(RemoteClient remoteClient, int key)
+  public void setMaximum(int val, int key)
   {
-    this.maximum = new AtomicMarkableReference<Node>(new Node(remoteClient,key),false);
+    this.maximum = new AtomicMarkableReference<Node>(new Node(val,key),false);
   }
 
   private int root(int u)
@@ -406,9 +408,9 @@ public class ParallelVEB
     return true;
   }
 
-  public boolean insert(RemoteClient remoteClient, int key)
+  public boolean insert(int val, int key)
   {
-    return insert(this, new Node(remoteClient, key));
+    return insert(this, new Node(val, key));
   }
 /*  public boolean insert(ParallelVEB helper, Node newNode)
   {
@@ -893,8 +895,8 @@ public class ParallelVEB
     if (helper.getMaximum().getKey() == helper.getMinimum().getKey())
     {
       Node expected = helper.getMaximum();
-      helper.getATMMaximum().compareAndSet(expected, new Node(null,-1), false, false);
-      helper.getATMMinimum().compareAndSet(expected, new Node(null,-1), false, false);
+      helper.getATMMaximum().compareAndSet(expected, new Node(-1,-1), false, false);
+      helper.getATMMinimum().compareAndSet(expected, new Node(-1,-1), false, false);
     }
     // base case if the tree has two keys then we delete one, assign the other to min or max as appropriate
     else if (helper.getUniverseSize() == 2)
@@ -924,16 +926,16 @@ public class ParallelVEB
         int firstCluster = this.getMinimumValue(helper.getSummary());
         if (firstCluster > 0)
         {
-          RemoteClient remoteClient = helper.getClusters().get(firstCluster).getMinimum().getValue();
+          int val = helper.getClusters().get(firstCluster).getMinimum().getValue();
           key = helper.generateIndex(firstCluster,this.getMinimumValue(helper.getClusters().get(firstCluster)));
-          Node newVal = new Node(remoteClient, key);
+          Node newVal = new Node(val, key);
           helper.getATMMinimum().compareAndSet(expected, newVal, false, false);
         }
         else
         {
-          RemoteClient remoteClient = helper.getClusters().get(0).getMinimum().getValue();
+          int val = helper.getClusters().get(0).getMinimum().getValue();
           key = helper.generateIndex(firstCluster,this.getMinimumValue(helper.getClusters().get(0)));
-          Node newVal = new Node(remoteClient, key);
+          Node newVal = new Node(val, key);
           helper.getATMMinimum().compareAndSet(expected, newVal, false, false);
         }
         //helper.setMinimum(val, key);
@@ -976,10 +978,10 @@ public class ParallelVEB
         ArrayList<ParallelVEB> cl = helper.getClusters();
         ParallelVEB clus = cl.get(helper.high(key));
         Node n = clus.getMaximum();
-        RemoteClient v;
+        int v;
         if (Objects.isNull(n))
         {
-          v = null;
+          v = -1;
         }
         else
         {
@@ -1172,7 +1174,7 @@ public class ParallelVEB
                 {
                   AtomicMarkableReference<Node> searchMinATM = searchTree.getATMMinimum();
                   Node searchMin = searchMinATM.getReference();
-                  if (searchMin.getValue() == null || searchMinATM.isMarked())
+                  if (searchMin.getValue() == -1 || searchMinATM.isMarked())
                   {
 
                     if (i >= (this.clusters.size() - 1))
