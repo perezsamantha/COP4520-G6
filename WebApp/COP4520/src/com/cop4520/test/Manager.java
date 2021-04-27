@@ -46,7 +46,7 @@ public class Manager implements ServletContextListener {
             rs.setContentType("text/plain");
 
             try {
-              Thread.sleep(2000);
+              Thread.sleep(100);
             } catch (InterruptedException e1) {
               throw new RuntimeException(e1);
             }
